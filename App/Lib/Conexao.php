@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Lib;
 
 use PDO;
@@ -8,23 +7,25 @@ use Exception;
 
 class Conexao
 {
-    private static $connection;
+    private static $conexao;
 
-    private function __construct(){}
+    private function __construct() {}
 
-    public static function getConnection() {
+    public static function getConnection()
+    {
+        $pdoConfig  = "mysql:host=localhost;";
+        $pdoConfig .= "dbname=expoAgricola;";
+        $pdoConfig .= "charset=utf8mb4";
 
-        $pdoConfig  = DB_DRIVER . ":". "host=" . DB_HOST . ";";
-        $pdoConfig .= "dbname=".DB_NAME.";";
-
-        try { 
-            if(!isset(self::$connection)){
-                self::$connection =  new PDO($pdoConfig, DB_USER, DB_PASSWORD);
-                self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        try {
+            if (!isset(self::$conexao)) {
+                // Utilizando o utilizador e palavra-passe definidos no script SQL
+                self::$conexao = new PDO($pdoConfig, 'feira', 'RimoBp@#2026');
+                self::$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             }
-            return self::$connection;
+            return self::$conexao;
         } catch (PDOException $e) {
-            throw new Exception("Erro de conexão com o banco de dados",500);
+            throw new Exception("Erro de ligação com a base de dados: " . $e->getMessage());
         }
     }
 }
