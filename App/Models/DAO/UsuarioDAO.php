@@ -1,12 +1,25 @@
 <?php
 namespace App\Models\DAO;
-use App\Lib\Conexao;
+use App\Models\Entidades\Usuario;
 
-class UsuarioDAO {
-    public function verificarLogin($email, $senha) {
-        $conexao = Conexao::getConnection();
-        $stmt = $conexao->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ?");
-        $stmt->execute([$email, $senha]);
-        return $stmt->fetch();
+class UsuarioDAO extends BaseDAO {
+    
+    public function verificarCredenciais($email, $senha) {
+        $sql = "SELECT * FROM usuarios WHERE email = :email AND senha = :senha";
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':senha', $senha);
+        $stmt->execute();
+
+        if ($stmt->rowCount()) {
+            $resultado = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $usuario = new Usuario();
+            $usuario->setIdUsuario($resultado['id_usuario']);
+            $usuario->setNome($resultado['nome']);
+            $usuario->setEmail($resultado['email']);
+            $usuario->setPapel($resultado['papel']);
+            return $usuario;
+        }
+        return false;
     }
 }

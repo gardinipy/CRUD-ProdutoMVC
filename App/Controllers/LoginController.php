@@ -1,37 +1,38 @@
 <?php
 namespace App\Controllers;
-use App\Models\DAO\UsuarioDAO;
 use App\Lib\Sessao;
+use App\Models\DAO\UsuarioDAO;
 
 class LoginController extends Controller {
+
     public function index() {
-        $this->render('login/index');
+        $this->render('login/index', false); 
     }
 
     public function autenticar() {
-        $email = $_POST['email'];
-        $senha = $_POST['senha'];
+        $email = $_POST['email'] ?? null;
+        $senha = $_POST['senha'] ?? null;
 
-        $dao = new UsuarioDAO();
-        $usuario = $dao->verificarLogin($email, $senha);
+        $usuarioDAO = new UsuarioDAO();
+        $usuario = $usuarioDAO->verificarCredenciais($email, $senha);
 
         if ($usuario) {
-            Sessao::grava('id_usuario', $usuario->id_usuario);
-            Sessao::grava('papel', $usuario->papel);
-            Sessao::grava('nome', $usuario->nome);
-            
-            if ($usuario->papel == 'cadastro') {
-                $this->redirect('/produtor');
-            } else {
-                $this->redirect('/julgamento');
-            }
+            Sessao::gravar('usuario_logado', true);
+            Sessao::gravar('id_usuario', $usuario->getIdUsuario());
+            Sessao::gravar('nome_usuario', $usuario->getNome());
+            Sessao::gravar('papel_usuario', $usuario->getPapel());
+            $this->redirect('/home');
         } else {
+            Sessao::gravar('mensagemErro', 'Email ou senha inválidos.');
             $this->redirect('/login');
         }
     }
 
     public function sair() {
-        Sessao::limpa('id_usuario');
+        Sessao::limpar('usuario_logado');
+        Sessao::limpar('id_usuario');
+        Sessao::limpar('nome_usuario');
+        Sessao::limpar('papel_usuario');
         $this->redirect('/login');
     }
 }
