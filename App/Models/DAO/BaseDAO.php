@@ -6,7 +6,7 @@ use App\Lib\Conexao;
 
 abstract class BaseDAO
 {
-    private $conexao;
+    protected $conexao;
 
     public function __construct()
     {

@@ -1,92 +1,65 @@
 <?php
-
 namespace App\Models\DAO;
 
 use App\Models\Entidades\Produto;
+use App\Lib\Conexao;
 
-class ProdutoDAO extends BaseDAO
-{
-    public  function listar($id = null)
-    {
-        if($id) {
-            $resultado = $this->select(
-                "SELECT * FROM produto WHERE id = {$id}"
-            );
-
-            return $resultado->fetchObject(Produto::class);
-        }else{
-            $resultado = $this->select(
-                'SELECT * FROM produto'
-            );
-            return $resultado->fetchAll(\PDO::FETCH_CLASS, Produto::class);
-        }
-
-        return false;
-    }
-
-    public  function salvar(Produto $produto) 
-    {
-        try {
-
-            $nome           = $produto->getNome();
-            $preco          = $produto->getPreco();
-            $quantidade     = $produto->getQuantidade();
-            $descricao      = $produto->getDescricao();
-
-            return $this->insert(
-                'produto',
-                ":nome,:preco,:quantidade,:descricao",
-                [
-                    ':nome'=>$nome,
-                    ':preco'=>$preco,
-                    ':quantidade'=>$quantidade,
-                    ':descricao'=>$descricao
-                ]
-            );
-
-        }catch (\Exception $e){
-            throw new \Exception("Erro na gravação de dados.", 500);
+class ProdutoDAO extends BaseDAO {
+    
+    public function listar($id = null) {
+        $conexao = Conexao::getConnection();
+        
+        if ($id) {
+            $sql = "SELECT * FROM produtos_agricolas WHERE id_produto = :id";
+            $stmt = $conexao->prepare($sql);
+            $stmt->bindValue(':id', $id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $dado = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $produto = new Produto();
+                $produto->setProduto($dado);
+                return $produto;
+            }
+            return null;
+        } else {
+            $sql = "SELECT * FROM produtos_agricolas";
+            $stmt = $conexao->query($sql);
+            $produtos = [];
+            if ($stmt) {
+                while ($dado = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                    $produto = new Produto();
+                    $produto->setProduto($dado);
+                    $produtos[] = $produto;
+                }
+            }
+            return $produtos;
         }
     }
 
-    public  function atualizar(Produto $produto) 
-    {
-        try {
-
-            $id             = $produto->getId();
-            $nome           = $produto->getNome();
-            $preco          = $produto->getPreco();
-            $quantidade     = $produto->getQuantidade();
-            $descricao      = $produto->getDescricao();
-
-            return $this->update(
-                'produto',
-                "nome = :nome, preco = :preco, quantidade = :quantidade, descricao = :descricao",
-                [
-                    ':id'=>$id,
-                    ':nome'=>$nome,
-                    ':preco'=>$preco,
-                    ':quantidade'=>$quantidade,
-                    ':descricao'=>$descricao,
-                ],
-                "id = :id"
-            );
-
-        }catch (\Exception $e){
-            throw new \Exception("Erro na gravação de dados.", 500);
-        }
+    public function salvar(Produto $produto) {
+        $conexao = Conexao::getConnection();
+        $sql = "INSERT INTO produtos_agricolas (nome_produto, variedade) VALUES (:nome, :variedade)";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindValue(':nome', $produto->getNomeProduto());
+        $stmt->bindValue(':variedade', $produto->getVariedade());
+        return $stmt->execute();
     }
 
-    public function excluir(Produto $produto)
-    {
-        try {
-            $id = $produto->getId();
+    public function atualizar(Produto $produto) {
+        $conexao = Conexao::getConnection();
+        $sql = "UPDATE produtos_agricolas SET nome_produto = :nome, variedade = :variedade WHERE id_produto = :id";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindValue(':nome', $produto->getNomeProduto());
+        $stmt->bindValue(':variedade', $produto->getVariedade());
+        $stmt->bindValue(':id', $produto->getIdProduto());
+        return $stmt->execute();
+    }
 
-            return $this->delete('produto',"id = $id");
-
-        }catch (Exception $e){
-
-            throw new \Exception("Erro ao deletar", 500);
-        }
+    public function excluir($id) {
+        $conexao = Conexao::getConnection();
+        $sql = "DELETE FROM produtos_agricolas WHERE id_produto = :id";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bindValue(':id', $id);
+        return $stmt->execute();
     }
 }

@@ -10,9 +10,9 @@
     <div class="card p-4 shadow" style="width: 350px;">
         <h3 class="text-center mb-4">Gestão Expo Agrícola</h3>
         
-        <?php if(\App\Lib\Sessao::existe('mensagemErro')): ?>
-            <div class="alert alert-danger"><?= \App\Lib\Sessao::retornaMensagem('mensagemErro') ?></div>
-        <?php endif; ?>
+  <?php if(\App\Lib\Sessao::existe('mensagem')): ?>
+    <div class="alert alert-danger"><?= \App\Lib\Sessao::retornaValor('mensagem') ?></div>
+<?php endif; ?>
 
         <form action="http://<?php echo APP_HOST; ?>/login/autenticar" method="POST">
             <div class="mb-3">

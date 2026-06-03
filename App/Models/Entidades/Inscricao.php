@@ -9,10 +9,11 @@ class Inscricao {
     private $pontuacao_final;
     private $id_usuario;
 
-    // Campos auxiliares para exibição nas Views
+    // Propriedades auxiliares para as Views
     private $nome_produtor;
     private $nome_produto;
 
+    // Getters e Setters
     public function getNumeroInscricao() { return $this->numero_inscricao; }
     public function setNumeroInscricao($numero_inscricao) { $this->numero_inscricao = $numero_inscricao; }
     public function getIdProdutor() { return $this->id_produtor; }
@@ -25,6 +26,7 @@ class Inscricao {
     public function setPontuacaoFinal($pontuacao_final) { $this->pontuacao_final = $pontuacao_final; }
     public function getIdUsuario() { return $this->id_usuario; }
     public function setIdUsuario($id_usuario) { $this->id_usuario = $id_usuario; }
+    
     public function getNomeProdutor() { return $this->nome_produtor; }
     public function setNomeProdutor($nome_produtor) { $this->nome_produtor = $nome_produtor; }
     public function getNomeProduto() { return $this->nome_produto; }

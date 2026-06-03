@@ -1,54 +1,34 @@
-    <main role="main" class="flex-shrink-0">
-      <div class="container">
-        <h1 class="mt-5">Listagem de Produtos</h1>
-        
-        <?php
+<div class="container mt-4">
+    <h2>Gestão de Produtos Agrícolas</h2>
+    <a href="http://<?php echo APP_HOST; ?>/produto/cadastrar" class="btn btn-success mb-3">Novo Produto</a>
+    
+    <?php if(\App\Lib\Sessao::existe('mensagem')): ?>
+        <?= \App\Lib\Sessao::retornaValor('mensagem') ?>
+    <?php endif; ?>
 
-        //Mensagens de Erro ou Sucesso na execução das funções
-        echo $Sessao::retornaMensagem();
-        $Sessao::limpaMensagem();
-
-        if (count($viewVar['listaProdutos'])>0){
-          echo '<div class="table-responsive">';
-          echo ' <table class="table table-bordered table-hover table-sm">';
-          echo ' <thead >';
-          echo ' <tr style="background-color: #bee5eb;">';
-          echo ' <th class="info">Id</th>';
-          echo ' <th class="info">Nome</th>';
-          echo ' <th class="info">Descrição</th>';
-          echo ' <th class="info">Preço</th>';
-          echo ' <th class="info">Qtde.</th>';
-          echo ' <th class="info">Cadastro</th>';
-          echo ' <th class="info"></th>';
-          echo ' </tr>';
-          echo ' </thead>';
-          echo ' <tbody>';
-          foreach ($viewVar['listaProdutos'] as $objProduto) {
-            $id = $objProduto->getId();
-            $nome = $objProduto->getNome();
-            $preco = $objProduto->getPreco();
-            $qtde = $objProduto->getQuantidade();
-            $descricao = $objProduto->getDescricao();
-            $dataCadastro = ($objProduto->getDataCadastro())->format('d/m/Y');
-                                
-            echo '<tr>';
-            echo ' <td>'.$id.'</td>';
-            echo ' <td>'.$nome.'</td>';
-            echo ' <td>'.$descricao.'</td>';
-            echo ' <td>'.$preco.'</td>';
-            echo ' <td>'.$qtde.'</td>';
-            echo ' <td>'.$dataCadastro.'</td>';
-            echo ' <td> <a href="http://'.APP_HOST.'/produto/editar/'.$id.'" class="btn btn-info btn-sm">Editar</a>  
-              <a href="http://'.APP_HOST.'/produto/excluirConfirma/'.$id.'/'.$nome.'" class="btn btn-danger btn-sm mt-1">Excluir</a>';
-            echo '</tr>';
-          }
-          echo ' </tbody>';
-          echo ' </table>';
-          echo '</div>'; 
-        }else {
-          echo "Nenhum Produto Encontrado.";
-        }         
-        ?>
-        
-      </div>
-    </main>
+    <table class="table table-bordered table-striped shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome do Produto</th>
+                <th>Variedade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($viewVar['listaProdutos'] as $produto): ?>
+            <tr>
+                <td><?= $produto->getIdProduto() ?></td>
+                <td><?= $produto->getNomeProduto() ?></td>
+                <td><?= $produto->getVariedade() ?></td>
+                <td>
+                    <form action="http://<?php echo APP_HOST; ?>/produto/excluir" method="POST" class="d-inline">
+                        <input type="hidden" name="id_produto" value="<?= $produto->getIdProduto() ?>">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>

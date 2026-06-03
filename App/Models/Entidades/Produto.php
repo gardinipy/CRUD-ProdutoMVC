@@ -1,84 +1,24 @@
 <?php
-
 namespace App\Models\Entidades;
 
-use DateTime;
+class Produto {
+    private $id_produto;
+    private $nome_produto;
+    private $variedade;
 
-class Produto
-{
-    private $id;
-    private $nome;
-    private $preco;
-    private $quantidade;
-    private $descricao;
-    private $dataCadastro;
+    public function getIdProduto() { return $this->id_produto; }
+    public function setIdProduto($id_produto) { $this->id_produto = $id_produto; }
 
-    public function getId()
-    {
-        return $this->id;
-    }
+    public function getNomeProduto() { return $this->nome_produto; }
+    public function setNomeProduto($nome_produto) { $this->nome_produto = $nome_produto; }
 
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+    public function getVariedade() { return $this->variedade; }
+    public function setVariedade($variedade) { $this->variedade = $variedade; }
 
-    public function getNome()
-    {
-        return $this->nome;
-    }
-
-    public function setNome($nome)
-    {
-        $this->nome = $nome;
-    }
-
-    public function getPreco()
-    {
-        return $this->preco;
-    }
-
-    public function setPreco($preco)
-    {
-        $this->preco = $preco;
-    }
-
-    public function getQuantidade()
-    {
-        return $this->quantidade;
-    }
-
-    public function setQuantidade($quantidade)
-    {
-        $this->quantidade = $quantidade;
-    }
-
-    public function getDescricao()
-    {
-        return $this->descricao;
-    }
-
-    public function setDescricao($descricao)
-    {
-        $this->descricao = $descricao;
-    }
-
-    public function getDataCadastro()
-    {
-        return new DateTime($this->dataCadastro);
-    }
-
-    public function setDataCadastro($dataCadastro)
-    {
-        $this->dataCadastro = $dataCadastro;
-    }
+    // Método para preencher os dados via array do formulário
     public function setProduto($dados) {
-      $this->id = $dados['id'];
-      $this->nome = $dados['nome'];
-      $this->preco = $dados['preco'];
-      $this->quantidade = $dados['quantidade'];
-      $this->descricao = $dados['descricao'];
-     
+        $this->id_produto = $dados['id_produto'] ?? null;
+        $this->nome_produto = $dados['nome_produto'] ?? null;
+        $this->variedade = $dados['variedade'] ?? null;
     }
-
 }
