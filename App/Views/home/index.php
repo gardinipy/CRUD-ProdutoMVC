@@ -1,7 +1,8 @@
 <div class="container mt-4">
     <div class="jumbotron">
         <h1 class="display-5">Bem-vindo ao Sistema de Gestão de Exposição Agrícola</h1>
-        <p class="lead">Módulo CRUD para manutenção de produtores, produtos, juízes, usuários e fichas de inscrição.</p>
+        <p class="lead">Natan Ian Masson de Souza</p>
+        <p class="lead">Kaue Gardini Xavier</p>
         <hr>
         <p>Usuário logado: <strong><?= \App\Lib\Sessao::retornaValor('nome_usuario'); ?></strong></p>
     </div>
