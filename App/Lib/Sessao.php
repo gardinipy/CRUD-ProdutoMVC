@@ -51,7 +51,7 @@ class Sessao
     }
 
     // =======================================================
-    // MÉTODOS GENÉRICOS ADICIONADOS PARA O LOGIN E JULGAMENTO
+    // MÉTODOS GENÉRICOS ADICIONADOS PARA O LOGIN E SESSÃO
     // =======================================================
     
     public static function gravar($chave, $valor) {

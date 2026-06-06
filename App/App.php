@@ -30,12 +30,12 @@ class App
          */
         define('APP_HOST'       , $_SERVER['HTTP_HOST'] . "/CRUD-ProdutoMVC");
         define('PATH'           , realpath('./'));
-        define('TITLE'          , "CRUD-Produto em PHP usando MVC e OO");
+        define('TITLE'          , "Sistema de Gestão de Exposição Agrícola");
         define('DB_HOST'        , "localhost");
-        define('DB_USER'        , "root"); //Usuário de acesso ao MySQL
-        define('DB_PASSWORD'    , "");  //Senha de acesso ao MySQL
-        define('DB_NAME'        , "crudproduto");  //Nome do Banco no MySQL
-        define('DB_DRIVER'      , "mysql");  //Usado pelo PDO
+        define('DB_USER'        , "feira");
+        define('DB_PASSWORD'    , "RimoBp@#2026");
+        define('DB_NAME'        , "expoAgricola");
+        define('DB_DRIVER'      , "mysql");
 
         $this->url();
     }

@@ -1,9 +1,7 @@
 <div class="container mt-4">
     <h2>Cadastrar Produto Agrícola</h2>
     
-    <?php if(\App\Lib\Sessao::existe('mensagem')): ?>
-        <?= \App\Lib\Sessao::retornaValor('mensagem') ?>
-    <?php endif; ?>
+    <?= $Sessao::retornaMensagem() ?>
 
     <form action="http://<?php echo APP_HOST; ?>/produto/salvar/novo" method="POST" class="card p-4 shadow-sm">
         <div class="mb-3">

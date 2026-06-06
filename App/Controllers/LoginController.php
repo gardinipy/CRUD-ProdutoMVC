@@ -1,15 +1,22 @@
 <?php
 namespace App\Controllers;
+
 use App\Lib\Sessao;
 use App\Models\DAO\UsuarioDAO;
 
-class LoginController extends Controller {
-
-    public function index() {
-        $this->render('login/index', false); 
+class LoginController extends Controller
+{
+    public function index()
+    {
+        if (Sessao::existe('usuario_logado')) {
+            $this->redirect('/home');
+        }
+        $this->render('Login/index', false);
+        Sessao::limpar('mensagemErro');
     }
 
-    public function autenticar() {
+    public function autenticar()
+    {
         $email = $_POST['email'] ?? null;
         $senha = $_POST['senha'] ?? null;
 
@@ -22,17 +29,16 @@ class LoginController extends Controller {
             Sessao::gravar('nome_usuario', $usuario->getNome());
             Sessao::gravar('papel_usuario', $usuario->getPapel());
             $this->redirect('/home');
-        } else {
-            Sessao::gravar('mensagemErro', 'Email ou senha inválidos.');
-            $this->redirect('/login');
         }
+
+        Sessao::gravar('mensagemErro', 'E-mail ou senha inválidos.');
+        $this->redirect('/login');
     }
 
-    public function sair() {
-        Sessao::limpar('usuario_logado');
-        Sessao::limpar('id_usuario');
-        Sessao::limpar('nome_usuario');
-        Sessao::limpar('papel_usuario');
+    public function sair()
+    {
+        session_destroy();
+        session_start();
         $this->redirect('/login');
     }
 }

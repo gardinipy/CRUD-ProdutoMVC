@@ -1,0 +1,75 @@
+CREATE DATABASE expoAgricola CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+CREATE USER 'feira'@'localhost' IDENTIFIED BY 'RimoBp@#2026';
+
+GRANT ALL PRIVILEGES ON expoAgricola.* TO 'feira'@'localhost';
+
+USE expoAgricola;
+
+CREATE TABLE produtos_agricolas (
+    id_produto INT AUTO_INCREMENT PRIMARY KEY,
+    nome_produto VARCHAR(255),
+    variedade VARCHAR(255)
+);
+
+CREATE TABLE produtores_rurais (
+    id_produtor INT AUTO_INCREMENT PRIMARY KEY,
+    nome_produtor VARCHAR(255),
+    municipio VARCHAR(255),
+    bairro VARCHAR(255),
+    telefone VARCHAR(20)
+);
+
+CREATE TABLE inscricoes (
+    numero_inscricao INT AUTO_INCREMENT PRIMARY KEY,
+    id_produtor INT,
+    id_produto INT,
+    tipo_produto ENUM('organico', 'convencional', 'nao_convencional'),
+    pontuacao_final DECIMAL(5,2),
+    id_usuario INT,
+    FOREIGN KEY (id_produtor) REFERENCES produtores_rurais(id_produtor),
+    FOREIGN KEY (id_produto) REFERENCES produtos_agricolas(id_produto)
+);
+
+CREATE TABLE criterios_julgamento (
+    id_criterio INT AUTO_INCREMENT PRIMARY KEY,
+    nome_criterio VARCHAR(255)
+);
+
+CREATE TABLE juizes (
+    id_juiz INT AUTO_INCREMENT PRIMARY KEY,
+    nome_juiz VARCHAR(255),
+    email VARCHAR(255),
+    senha VARCHAR(255)
+);
+
+CREATE TABLE julgamentos (
+    id_inscricao INT,
+    id_juiz INT,
+    id_criterio INT,
+    nota DECIMAL(5,2),
+    FOREIGN KEY (id_inscricao) REFERENCES inscricoes(numero_inscricao),
+    FOREIGN KEY (id_juiz) REFERENCES juizes(id_juiz),
+    FOREIGN KEY (id_criterio) REFERENCES criterios_julgamento(id_criterio),
+    PRIMARY KEY (id_inscricao, id_juiz, id_criterio)
+);
+
+CREATE TABLE usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    senha VARCHAR(255),
+    papel ENUM('cadastro', 'juiz')
+);
+
+INSERT INTO usuarios (nome, email, senha, papel)
+VALUES ('UsuarioCadastro', 'cadastro@example.com', 'senha123', 'cadastro');
+INSERT INTO usuarios (nome, email, senha, papel)
+VALUES ('user01', 'user01@email.com', 'senha123', 'cadastro');
+INSERT INTO usuarios (nome, email, senha, papel)
+VALUES ('user02', 'user02@email.com', 'senha123', 'cadastro');
+INSERT INTO usuarios (nome, email, senha, papel)
+VALUES ('user03', 'user03@email.com', 'senha123', 'cadastro');
+
+INSERT INTO usuarios (nome, email, senha, papel)
+VALUES ('UsuarioJuiz', 'juiz@example.com', 'senha456', 'juiz');

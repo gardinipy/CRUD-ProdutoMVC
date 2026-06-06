@@ -1,6 +1,8 @@
 <div class="container mt-5">
     <h2>Cadastrar Produtor Rural</h2>
-    <form action="http://<?php echo APP_HOST; ?>/produtor/salvar" method="POST">
+    <?= $Sessao::retornaMensagem() ?>
+
+    <form action="http://<?php echo APP_HOST; ?>/produtor/salvar/novo" method="POST" class="card p-4 shadow-sm">
         <div class="form-group mt-3">
             <label>Nome do Produtor</label>
             <input type="text" name="nome_produtor" class="form-control" required>
